@@ -7,7 +7,7 @@ import random
 import numpy as np
 import sys
 from itertools import chain
-
+from random import randrange
 
 import pygame
 
@@ -48,6 +48,7 @@ def init(_boardname=None):
     player = game.player
     
 def main():
+    journees = 2
 
     #for arg in sys.argv:
     iterations = 100 # default
@@ -99,19 +100,119 @@ def main():
     
     
     
-        
+        """ SEMAINE 1
     #-------------------------------
     # Attributaion aleatoire des fioles 
     #-------------------------------
     
     objectifs = []
     for k in range(nbPlayers):
+
         objectifs.append(random.choice(goalStates))
         print("Objectif joueur", k, objectifs[k])
 
     nbratab=[]*len(goalStates)
     nbrbtab=[]*len(goalStates)
     nbrtotal = [0]*len(goalStates)
+    """
+
+    # SEMAINE 2
+    #-------------------------------
+    # Attributaion aleatoire
+    #-------------------------------
+    nbratab=[]*len(goalStates)
+    nbrbtab=[]*len(goalStates)
+    nbrtotal = [0]*len(goalStates)
+    posPlayers = initStates
+    def strategieAleatoire(nbPlayers,nbElec):
+        tab= [0]*5
+        for i in range(nbPlayers//2):
+            tab[randrange(nbElec)] += 1
+
+        return tab
+
+    def strategieTetu (journe):
+        tab=[]
+        tmp = strategieAleatoire(nbPlayers,len(goalStates))
+        for i in range(journees):
+            tab.append(tmp)
+        
+        return tab
+
+
+
+
+
+
+    def deplacementSansBudget(posiPlayers,strgA,strgB,goalStates):
+        cpt= 0
+        for i in range(len(strgA)):
+            (row,col)=goalStates[i]
+            for j in range(strgA[i]):
+                posiPlayers[cpt]= goalStates[i]
+                players[j].set_rowcol(row,col)
+                print(posiPlayers[cpt])
+                cpt+=1
+                
+
+        for i in range(len(strgB)):
+            (row,col)=goalStates[i]
+            for j in range(strgA[i]):
+                posiPlayers[cpt]= goalStates[i]
+                players[j].set_rowcol(row,col)
+                print(posiPlayers[cpt])
+                cpt+=1
+        print(posiPlayers)
+               
+    
+
+    def calculGain(strgA,strgB):
+        nbrA= 0
+        nbrB=0
+        for i in range(len(strgA)):
+            if ( strgA[i] > strgB[i]):
+                nbrA+=1
+            elif (strgA[i]<strgB[i]):
+                nbrB+=1
+        print("nbr A :", nbrA, " nbr B:", nbrB)
+        if (nbrA > nbrB):
+            print("A a gangé")
+        elif (nbrA < nbrB):
+            print("B a gangé")
+        else:
+            print("Egalisation")
+
+
+    def aleaF(journe):
+        tab=[]
+        for i in range (journe):
+            tab.append(strategieAleatoire(nbPlayers,len(goalStates)))
+
+        return tab
+
+    
+    stratA = strategieTetu(journees)
+    stratB = strategieTetu(journees)
+
+    print("STRATEGIE TETU : ")
+   
+    for i in range(journees):
+
+        print("Journee numéro:",i)
+
+        strgA = stratA[i]
+        print("STRATEGIE A : " , strgA)
+        strgB = stratB[i]
+        print("STRATEGIE B : " , strgB)
+
+        deplacementSansBudget(posPlayers,strgA,strgB,goalStates)
+        calculGain(strgA,strgB)
+
+    
+
+
+
+    """
 
     for j in range(len(goalStates)):
         nbra=0
@@ -126,7 +227,7 @@ def main():
                 nbrtotal[j]+=1
         nbratab.append(nbra)
         nbrbtab.append(nbrb)
-                
+              
 
     voixa=0
     voixb=0
@@ -139,7 +240,7 @@ def main():
                 voixb +=1
 
 
-
+    """
  
 
     
@@ -153,7 +254,7 @@ def main():
     #-------------------------------
     # calcul A* pour le joueur 0
     #-------------------------------
-    
+    """
     path=[]
     
     g =np.ones((nbLignes,nbCols),dtype=bool)  # par defaut la matrice comprend des True  
@@ -165,12 +266,12 @@ def main():
         p = ProblemeGrid2D(initStates[j],objectifs[j],g,'manhattan')
         path.append(probleme.astar(p))
         print ("Chemin ", j+1 , " trouvé:", path)
-        
+    """
     
     #-------------------------------
     # Boucle principale de déplacements 
     #-------------------------------
-    
+    """
     cpt = 0      
     posPlayers = initStates
 
@@ -190,8 +291,8 @@ def main():
                     if (cpt == nbPlayers):
                         break
             
-
-        """
+    """
+    """
         row,col = posPlayers[1]
 
         while True: # tant que pas legal on retire une position
@@ -212,13 +313,13 @@ def main():
             break
             
             
-        """
+    """
 
 
         
-        # on passe a l'iteration suivante du jeu
-        game.mainiteration()
-
+    # on passe a l'iteration suivante du jeu
+    game.mainiteration()
+    """
     print ("Les voix de a :", voixa)
     print ("Les voix de b :", voixb)
 
@@ -229,7 +330,7 @@ def main():
             print("Team b a gangé")
         else:
             print("Personne n'a gangé")
-                
+    """         
         
             
     
