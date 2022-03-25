@@ -48,7 +48,7 @@ def init(_boardname=None):
     player = game.player
     
 def main():
-    journees = 2
+    journees = 10
 
     #for arg in sys.argv:
     iterations = 100 # default
@@ -124,12 +124,18 @@ def main():
     nbrbtab=[]*len(goalStates)
     nbrtotal = [0]*len(goalStates)
     posPlayers = initStates
+    
+    strgk = [([2, 2, 2, 2, 1],0.3),([3, 1, 1, 1, 1],0.2),([2, 1, 2, 1, 1],0.1),([0, 3, 1, 3, 0],0.3),([2, 0, 3, 0, 2],0.1)]
+
+
     def strategieAleatoire(nbPlayers,nbElec):
         tab= [0]*5
         for i in range(nbPlayers//2):
             tab[randrange(nbElec)] += 1
 
         return tab
+
+
 
     def strategieTetu (journe):
         tab=[]
@@ -138,6 +144,18 @@ def main():
             tab.append(tmp)
         
         return tab
+    
+    def strategieStochastique (strgk):
+      acc = 0
+      k = random.uniform(0, 1)
+      for i in range (len(strgk)):
+          strat,p = strgk[i]
+          acc = acc+p
+          if (acc >= k):
+              return strat
+
+
+
 
 
 
@@ -146,22 +164,26 @@ def main():
 
     def deplacementSansBudget(posiPlayers,strgA,strgB,goalStates):
         cpt= 0
-        for i in range(len(strgA)):
-            (row,col)=goalStates[i]
-            for j in range(strgA[i]):
-                posiPlayers[cpt]= goalStates[i]
+        for n in range(len(strgA)):
+            (row,col)=goalStates[n]
+            for j in range(strgA[n]):
+                print("cpt",cpt,n)
+                posiPlayers[cpt]= goalStates[n]
                 players[j].set_rowcol(row,col)
                 print(posiPlayers[cpt])
+                
                 cpt+=1
                 
 
-        for i in range(len(strgB)):
-            (row,col)=goalStates[i]
-            for j in range(strgA[i]):
-                posiPlayers[cpt]= goalStates[i]
-                players[j].set_rowcol(row,col)
+        for t in range(len(strgB)):
+            (row,col)=goalStates[t]
+            for r in range(strgA[t]):
+                print("cpt",cpt,t)
+                posiPlayers[cpt]= goalStates[t]
+                players[r].set_rowcol(row,col)
                 print(posiPlayers[cpt])
                 cpt+=1
+                print("cpt",cpt,t)
         print(posiPlayers)
                
     
@@ -169,47 +191,52 @@ def main():
     def calculGain(strgA,strgB):
         nbrA= 0
         nbrB=0
-        for i in range(len(strgA)):
-            if ( strgA[i] > strgB[i]):
+        for m in range(len(strgA)):
+            if ( strgA[m] > strgB[m]):
                 nbrA+=1
-            elif (strgA[i]<strgB[i]):
+            elif (strgA[m]<strgB[m]):
                 nbrB+=1
         print("nbr A :", nbrA, " nbr B:", nbrB)
         if (nbrA > nbrB):
             print("A a gangé")
+            return 1
         elif (nbrA < nbrB):
             print("B a gangé")
+            return -1
         else:
             print("Egalisation")
+            return 0
 
 
     def aleaF(journe):
         tab=[]
-        for i in range (journe):
+        for k in range (journe):
             tab.append(strategieAleatoire(nbPlayers,len(goalStates)))
 
         return tab
 
-    
+    """
     stratA = strategieTetu(journees)
     stratB = strategieTetu(journees)
-
     print("STRATEGIE TETU : ")
-   
-    for i in range(journees):
-
-        print("Journee numéro:",i)
-
-        strgA = stratA[i]
+    """
+    for jr in range(journees):
+        print("Journee numéro:",jr)
+        if (jr==0):
+            strgA = strategieStochastique(strgk)
+            strgB = strategieStochastique(strgk)
+        elif (result == 1):
+            strgB = tmpA
+        elif (result == -1):
+            strgA = tmpB
+        
+        tmpA = strgA
+        tmpB = strgB
         print("STRATEGIE A : " , strgA)
-        strgB = stratB[i]
         print("STRATEGIE B : " , strgB)
-
         deplacementSansBudget(posPlayers,strgA,strgB,goalStates)
-        calculGain(strgA,strgB)
-
-    
-
+        result = calculGain(strgA,strgB)
+        
 
 
     """
@@ -291,17 +318,17 @@ def main():
                     if (cpt == nbPlayers):
                         break
             
-    """
-    """
-        row,col = posPlayers[1]
+   
 
-        while True: # tant que pas legal on retire une position
-            x_inc,y_inc = random.choice([(0,1),(0,-1),(1,0),(-1,0)])
-            next_row = row+x_inc
-            next_col = col+y_inc
-            if legal_position(next_row,next_col):
-                break
-        players[1].set_rowcol(next_row,next_col)
+    row,col = posPlayers[1]
+
+    while True: # tant que pas legal on retire une position
+        x_inc,y_inc = random.choice([(0,1),(0,-1),(1,0),(-1,0)])
+        next_row = row+x_inc
+        next_col = col+y_inc
+        if legal_position(next_row,next_col):
+            break
+        layers[1].set_rowcol(next_row,next_col)
         print ("pos 1:", next_row,next_col)
     
         col=next_col
@@ -312,13 +339,13 @@ def main():
             print("le joueur 1 a atteint son but!")
             break
             
-            
     """
+    
 
 
         
     # on passe a l'iteration suivante du jeu
-    game.mainiteration()
+    game.mainiteration(10)
     """
     print ("Les voix de a :", voixa)
     print ("Les voix de b :", voixb)
