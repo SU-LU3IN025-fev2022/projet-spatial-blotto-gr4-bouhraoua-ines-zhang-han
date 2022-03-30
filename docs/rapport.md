@@ -17,9 +17,17 @@
     - Stratégie Aléatoire: attribuer aléatoirement les militants aux agents
     - Stratégie Têtu: attribuer aléatoirement une décomposition qui va être jouer en boucle sans la changer pendant le reste de la partie
     - Stratégie Stochastique: on a définie un tableau avec des différentes décompositions des militants en jouant avec les nombres par exemple: paire,impaire,paire,impaire ... ou des palindromes 0,3,1,3,0 etc .. avec leurs probabilités pour qu'après la stratégie avec la probabilité la plus haute va être sélectionnée.
+    - Stratégie Meilleure réponse:
 
 ## Description des résultats
 
 ### Pour la semaine 1:
 
   - À chaque exécution du jeu les 14 militants sélectionnent des agents au hasard et se déplacent vers ces derniers avec la méthode A* - Résultats corrects
+
+### Pour la semaine 2:
+
+  - Stratégie Aléatoire marche avec le même principe de la semaine 1 - Résultats corrects
+  - Stratégie Têtu prend une stratégie aléatoire et la répète pendant le reste de la partie - Résultats corrects
+  - Stratégie Stochastique choisit une stratégie avec la probabilité la plus haute parmis les stratégies prédéfinis - Résultats corrects
+  - Stratégie Meilleure réponse
