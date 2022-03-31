@@ -326,7 +326,8 @@ def main():
             nstrg[0] = nstrg[0] + cpt
             return nstrg
 
-        tabSitu = [[1 / 2, 1 / 2, 2 / 3], [1 / 2, 1 / 2, 3 / 5], [1 / 3, 2 / 5, 1 / 2]]
+        tabSitu = [[0.01, 0.2, 0.4], [0.2, 0.25, 0.3], [0.15, 0.2, 0.27]]
+        # tabSitu = [[1 / 2, 1 / 2, 2 / 3], [1 / 2, 1 / 2, 3 / 5], [1 / 3, 2 / 5, 1 / 2]]
 
         def findZero(stg):
             cpt = 0
@@ -374,8 +375,11 @@ def main():
             # print(lis)
             return lis.index(max(lis))
 
-        def strgFictious(lisPref):
-            return strGene(calculEs(lisPref), len(goalStates), nbPlayers // 2)
+        def strgFictious(lisPref, lisav):
+            res = calculEs(lisPref)
+            if res == 0 and lisav != []:
+                return strategieStochastique(strgk)
+            return strGene(res, len(goalStates), nbPlayers // 2)
 
         print("\n\nStart:\n\n")
         aTotal = 0
@@ -394,8 +398,8 @@ def main():
                     strgA = strategieAleatoire(nbPlayers, len(goalStates))
                 case 1:
                     if jr == 0:
-                        # strgA = [0, 0, 1, 1, 5]
-                        strgA = strategieAleatoire(nbPlayers, len(goalStates))
+                        strgA = [1, 0, 1, 1, 4]
+                        # strgA = strategieAleatoire(nbPlayers, len(goalStates))
                     else:
                         random.shuffle(strgA)
                 case 2:
@@ -406,7 +410,10 @@ def main():
                     else:
                         strgA = strategieMeilleure(tmpBlis)
                 case 4:
-                    strgA = strgFictious(lisPb)
+                    if jr == 0:
+                        strgA = strgFictious(lisPb, [])
+                    else:
+                        strgA = strgFictious(lisPb, tmpBlis)
                 case _:
                     raise Exception("strategie not found")
 
@@ -417,7 +424,7 @@ def main():
                     strgB = strategieAleatoire(nbPlayers, len(goalStates))
                 case 1:
                     if jr == 0:
-                        strgB = strategieAleatoire(nbPlayers, len(goalStates))
+                        strgB = [0, 0, 1, 2, 4]
                     else:
                         random.shuffle(strgB)
                 case 2:
@@ -429,17 +436,20 @@ def main():
                         # print("**tmpAlis ", tmpAlis)
                         strgB = strategieMeilleure(tmpAlis)
                 case 4:
-                    strgB = strgFictious(lisPa)
+                    if jr == 0:
+                        strgB = strgFictious(lisPa, [])
+                    else:
+                        strgB = strgFictious(lisPa, tmpAlis)
                 case _:
                     raise Exception("strategie not found")
 
             lisPb[findZero(strgB)] += 1
 
             deplacementSansBudget(posPlayers, strgA, strgB, goalStates)
-            # print("strgA: ", strgA)
-            # print("strgB: ", strgB)
+            print("strgA: ", strgA)
+            print("strgB: ", strgB)
             result = calculGain(strgA, strgB)
-            # print("result: ", result)
+            print("result: ", result)
 
             match result:
                 case 1:
